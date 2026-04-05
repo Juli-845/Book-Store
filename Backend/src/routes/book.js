@@ -10,7 +10,7 @@ const {
 } = require("../controllers/book.controller.js");
 
 //add-book --admin only
-router.route("/add-book").post(verifyJWT, addBook);
+router.route("/add-book").post( addBook);
 
 //update-book --admin only
 router.route("/update-book").put(verifyJWT, updateBook);

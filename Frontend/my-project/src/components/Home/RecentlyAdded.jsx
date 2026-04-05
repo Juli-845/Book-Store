@@ -9,13 +9,13 @@ function RecentlyAdded() {
       const fetchData = async () => {
         try {
           const response = await axios.get(
-            "http://localhost:8000/api/v1/book/get-all-books",
+            "http://localhost:8000/api/v1/book/get-recent-books",
             // {
             //   withCredentials: true,
             // },
           );
           console.log(response.data);
-          setBook(response.data.books); // adjust if needed
+          setBook(response.data.data); // adjust if needed
         } catch (error) {
           console.log("ERROR:", error);
         }

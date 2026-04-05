@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SignInButton({ setsigninmodal }) {
@@ -15,7 +15,7 @@ function SignInButton({ setsigninmodal }) {
 
     try{
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/login",
+        "http://localhost:6000/api/v1/users/login",
         {email, username, password},
       );
       console.log(response.data);

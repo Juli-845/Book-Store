@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SignUpButton({ setsignupmodal }) {
@@ -14,7 +14,7 @@ function SignUpButton({ setsignupmodal }) {
     // e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/register",
+        "http://localhost:6000/api/v1/users/register",
         { username, email, password },
       );
 
@@ -23,13 +23,13 @@ function SignUpButton({ setsignupmodal }) {
       navigate("/login");
       
     } catch (error) {
-        // const msg =
-        //   error.response?.data?.message ||
-        //   error.response?.data?.error ||
-    
+        const msg =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Something went wrong";
 
-        alert(error.response?.data?.message);
-        console.log(error.response?.data);
+      setErrorMsg(msg);
+      console.log(error.response?.data);
     }
   };
 
