@@ -26,12 +26,12 @@ function RecentlyAdded() {
 
   return (
     <>
-      <div>
-        <div className="m-2 ">
+      <div className="mt-8 px-4">
+        <div>
           <h1 className="font-bold text-2xl">NEW THIS WEEK</h1>
         </div>
-        <div className="bg-red-300 h-80 m-2">
-          <div className=" my-4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        
+          <div className=" bg-amber-100 my-4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {Book &&
               Book.map((items, i) => (
                 <div key={i}>
@@ -39,7 +39,7 @@ function RecentlyAdded() {
                 </div>
               ))}
           </div>
-        </div>
+        
       </div>
     </>
   );
