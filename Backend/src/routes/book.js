@@ -25,6 +25,6 @@ router.route("/get-all-books").get( getAllBooks);
 router.route("/get-recent-books").get( getRecentBooks);
 
 //get-a-specific-book --public
-router.route("/get-book-by-id/:book_id").get(verifyJWT, getSpecificBook);
+router.route("/get-book-by-id/:book_id").get( getSpecificBook);
 
 module.exports = router;

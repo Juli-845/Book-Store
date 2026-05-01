@@ -1,0 +1,42 @@
+# Backend + Frontend common
+
+# Node Modules
+node_modules/
+/client/node_modules/
+/server/node_modules/
+
+# Environment Variables (Secrets)
+.env
+/server/.env
+/client/.env
+
+# Build Output
+/client/build/
+/client/dist/
+/server/dist/
+
+# IDE/Editor Settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+/coverage
+
+# zip files
+*.zip

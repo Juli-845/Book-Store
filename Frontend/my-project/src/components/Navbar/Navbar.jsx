@@ -15,18 +15,15 @@ import { FcAbout } from "react-icons/fc";
 import { BiCollection } from "react-icons/bi";
 import SignInButton from "../../pages/SignIn";
 import SignUpButton from "../../pages/SignUp";
+import ForgotPassword from "../../pages/ForgotPassword";
+import ResetPassword from "../../pages/ResetPassword";
 
 
 function Navbar() {
 
-  const [signInModal, setSignInModal] = useState(false);
-  const [signUpModal, setSignUpModal] = useState(false);
+  const [modal, setModal] = useState(null);
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  // const toggleDropdown = () => {
-  //   const dropdown = document.querySelector('#dropdownButton #dropdown');
-  //   dropdown.classList.toggle('hidden');
-  // }
 
   return (
     <>
@@ -97,7 +94,8 @@ function Navbar() {
               {/* Sign In Button */}
               <div>
                 <button
-                  onClick={() => setSignInModal(true)}
+                  // onClick={() => setSignInModal(true)}
+                  onClick={() => setModal("signin")}
                   className=" hover:font-bold px-4 py-2  text-white group-hover:opacity-100 flex hover:border-[1px] rounded p-0.5 hover:bg-blue-600 text-1.5xl"
                 >
                   <CgProfile className="text-2xl mr-2 hover:scale-115" />
@@ -109,7 +107,8 @@ function Navbar() {
                 <div className="mb-2 flex justify-between">
                   <div className="font-semibold">New Customer?</div>
                   <button
-                    onClick={() => setSignUpModal(true)}
+                    // onClick={() => setSignUpModal(true)}
+                    onClick={() => setModal("signup")}
                     className="font-bold"
                   >
                     SignUp
@@ -140,41 +139,17 @@ function Navbar() {
               </div>
 
               {/* Sign In Modal */}
-              {
-                signInModal && <SignInButton setsigninmodal={setSignInModal} />
-                // <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-400 bg-opacity-70">
-                //   <div className="bg-white p-6 rounded-lg w-96 text-center">
-                //     <h2 className="text-2xl text-black font-bold mb-4">
-                //       Sign In
-                //     </h2>
-                //     <input
-                //       type="email"
-                //       placeholder="Email"
-                //       className="w-full font-bold mb-3 p-2 border rounded bg-zinc-700"
-                //     />
-                //     <input
-                //       type="password"
-                //       placeholder="Password"
-                //       className="w-full font-bold mb-3 p-2 border-2 rounded bg-zinc-700"
-                //     />
-                //     <button
-                //       onSubmit="/"
-                //       className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                //     >
-                //       Sign In
-                //     </button>
-                //     <button
-                //       onClick={() => setShowModal(false)}
-                //       className="mt-3 text-sm text-gray-500 hover:text-gray-700"
-                //     >
-                //       Cancel
-                //     </button>
-                //   </div>
-                // </div>
-              }
+              {modal === "signin" && <SignInButton setModal={setModal} />}
 
-              {/* SignUp model */}
-              {signUpModal && <SignUpButton setsignupmodal={setSignUpModal} />}
+              {/* Sign Up Modal */}
+              {modal === "signup" && <SignUpButton setModal={setModal} />}
+
+              {/* ForgotPassword Modal */}
+              {modal === "forgot" && <ForgotPassword setModal={setModal} />}
+
+              {/* ResetPassword Modal */}
+              {modal === "resetpassword" && (<ResetPassword setModal={setModal} />
+              )}
             </div>
           </div>
 

@@ -4,9 +4,11 @@ import Footer from "./components/Footer/Footer";
 import AllCollections from "./pages/AllCollections"
 import About from "./pages/About";
 import Cart from "./pages/Cart";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+// import SignIn from "./pages/SignIn";
+// import SignUp from "./pages/SignUp";
+import ViewBookDetails from "./components/ViewBookDetails/ViewBookDetails";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 
@@ -19,12 +21,12 @@ function App() {
           <Route path="/allCollections" element={<AllCollections />} />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/view-book-details/:id"/>
+          <Route
+            path="/view-book-details/:book_id"
+            element={<ViewBookDetails />}
+          />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
-
-        {/* <Home /> */}
         <Footer />
       </BrowserRouter>
     </>

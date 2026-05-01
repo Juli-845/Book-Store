@@ -120,15 +120,13 @@ const loginUser = asyncHandler(async (req, res) => {
   // password check
   //access and refresh token
   // send cookie
-  const { email, username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username && !email) {
+  if (!email) {
     throw new ApiError(400, "username or password is required");
   }
 
-  const user = await UserSchema.findOne({
-    $or: [{ username }, { email }],
-  });
+  const user = await UserSchema.findOne({email });
   if (!user) {
     throw new ApiError(404, "Invalid user credentials");
     // return res.status(400).json({ message: "Invalid Credentials" });
@@ -253,8 +251,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 //Forgot Password
 const transporter = nodemailer.createTransport({
   service: "gmail",
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  // port: 587,
+  // secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -268,59 +266,99 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     if (!user) {
       return res.status(400).json(new ApiResponse(404, "user not found"));
-    };
-  
+    }
+
     const token = crypto.randomBytes(32).toString("hex");
     console.log("token:", token);
     user.resetToken = crypto.createHash("sha256").update(token).digest("hex");
-    user.resetTokenExpiry = Date.now() + 3600000;  // token valid for 1 hour
+    user.resetTokenExpiry = Date.now() + 3600000; // token valid for 1 hour
     await user.save();
     console.log("user save successfully");
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-      await transporter.sendMail({
-        to: email,
-        subject: "Password Reset",
-        html: `<p>Click ${resetUrl}to reset your password. This link will expire in 1 hour.</p>`,
-      });
-   
-      res
-        .status(201)
-        .json(
-          new ApiResponse(200, user, "Password reset link sent to your email")
-        );
+    await transporter.sendMail({
+      to: email,
+      subject: "Password Reset",
+      html: `<p>Click ${resetUrl}to reset your password. This link will expire in 1 hour.</p>`,
+    });
+
+    res
+      .status(201)
+      .json(
+        new ApiResponse(200, user, "Password reset link sent to your email"),
+      );
   } catch (error) {
-    throw new ApiError(500, "Internal server error");
+    console.log("FULL ERROR:", error); // ← add this
+    throw new ApiError(500, error.message); // ← show real message
   }
+  
+  // catch (error) {
+  //   throw new ApiError(500, "Internal server error");
+  // }
 });
 
 //Reset Password 
-const resetPassword = asyncHandler(async(req, res) => {
-  const { token } = req.params;
-  const { newpassword } = req.body;
+// const resetPassword = asyncHandler(async(req, res) => {
+//   const { token } = req.params;
+//   const { newpassword } = req.body;
+
+//   try {
+//     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+//     const user = await UserSchema.findOne({
+//       resetToken: hashedToken, resetTokenExpiry: { $gt: Date.now() },
+//     });
+  
+//     if (!user) {
+//       return res.status(401).json(new ApiResponse(400, "Invalid or expired token"));
+//     }
+  
+//     user.newpassword = await bcrypt.hash(newpassword, 10);
+//     user.resetToken = undefined;
+//     user.resetTokenExpiry = undefined;
+    
+//     await user.save();
+//     console.log("password reset successfully");
+//     res.status(201).json(new ApiResponse(200, user, "Password reset successfully"));
+//   } catch (error) {
+//     throw new ApiError(500, "Internal server error");
+//   }
+// })
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token } = req.params; // ← from URL
+  const { newPassword } = req.body; // ← camelCase, from body
 
   try {
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await UserSchema.findOne({
-      resetToken: hashedToken, resetTokenExpiry: { $gt: Date.now() },
+      resetToken: hashedToken,
+      resetTokenExpiry: { $gt: Date.now() },
     });
-  
+
     if (!user) {
-      return res.status(401).json(new ApiResponse(400, "Invalid or expired token"));
+      return res
+        .status(401)
+        .json(new ApiResponse(400, "Invalid or expired token"));
     }
-  
-    user.newpassword = await bcrypt.hash(newpassword, 10);
+
+    // FIX: save to "password" field, not "newpassword"
+    user.password = await bcrypt.hash(newPassword, 10);
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
-    
+
     await user.save();
-    console.log("password reset successfully");
-    res.status(201).json(new ApiResponse(200, user, "Password reset successfully"));
+    console.log("Password reset successfully");
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, {}, "Password reset successfully"));
   } catch (error) {
+    console.log("Reset password error:", error);
     throw new ApiError(500, "Internal server error");
   }
-})
+});
 
 const getUserInformation = asyncHandler(async(req, res) => {
   try {
